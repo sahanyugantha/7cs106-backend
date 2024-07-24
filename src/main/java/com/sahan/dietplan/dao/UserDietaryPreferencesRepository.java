@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDietaryPreferencesRepository extends JpaRepository<UserDietaryPreferences, UserDietaryPreferences.UserDietaryPreferencesId> {
-
+    UserDietaryPreferences findByProfileIdAndDietaryPreferencesId(Integer profileId, Integer dietaryPreferencesId);
 }

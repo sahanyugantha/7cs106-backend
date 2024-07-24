@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserMedicalConditionsRepository extends JpaRepository<UserMedicalConditions, UserMedicalConditions.UserMedicalConditionsId> {
+    UserMedicalConditions findByProfileIdAndMedicalConditionsId(Integer profileId, Integer medicalConditionsId);
 }
