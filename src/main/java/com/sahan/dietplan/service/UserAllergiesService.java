@@ -34,7 +34,7 @@ public class UserAllergiesService {
     }
 
     public UserAllergies findByProfileIdAndAllergyId(Integer profileId, Integer allergyId) {
-        return userAllergiesRepository.findByProfileIdAndAllergiesId(profileId, allergyId);
+        return userAllergiesRepository.findByIdTblProfileIdAndIdTblAllergiesId(profileId, allergyId);
     }
 }
 

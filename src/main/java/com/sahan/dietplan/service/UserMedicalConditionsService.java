@@ -34,6 +34,6 @@ public class UserMedicalConditionsService {
     }
 
     public UserMedicalConditions findByProfileIdAndMedicalConditionsId(Integer profileId, Integer conditionId) {
-        return userMedicalConditionsRepository.findByProfileIdAndMedicalConditionsId(profileId, conditionId);
+        return userMedicalConditionsRepository.findByIdTblProfileIdAndIdTblMedicalConditionsId(profileId, conditionId);
     }
 }

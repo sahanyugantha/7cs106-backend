@@ -34,7 +34,7 @@ public class UserDietaryPreferencesService {
     }
 
     public UserDietaryPreferences findByProfileIdAndDietaryPreferencesId(Integer profileId, Integer dietaryPreferencesId) {
-        return userDietaryPreferencesRepository.findByProfileIdAndDietaryPreferencesId(profileId, dietaryPreferencesId);
+        return userDietaryPreferencesRepository.findByIdTblProfileIdAndIdTblDietaryPreferencesId(profileId, dietaryPreferencesId);
     }
 }
 
