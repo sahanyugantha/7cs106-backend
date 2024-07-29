@@ -1,18 +1,25 @@
 package com.sahan.dietplan.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sahan.dietplan.model.User;
 import com.sahan.dietplan.service.UserService;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
@@ -30,10 +37,17 @@ public class UserController {
         }
     }
 
-    @GetMapping()
-    public String test() {
-        String msg = "Helloooo";
-        return msg;
+    @GetMapping
+    public ResponseEntity<Object> getAllUsers() {
+        //System.out.println("REACH");
+        List<User> users = userService.getAllUsers();
+        if (users.isEmpty()) {
+            Map<String, String> errorMessage = new HashMap<>();
+            errorMessage.put("ERROR", "NO DATA");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        } else {
+            return ResponseEntity.ok(users);
+        }
     }
 
     @GetMapping("/{id}")

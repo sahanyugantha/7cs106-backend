@@ -1,7 +1,7 @@
 package com.sahan.dietplan.dao;
 
 import com.sahan.dietplan.model.Profile;
-import jakarta.persistence.Id;
+import javax.persistence.Id;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

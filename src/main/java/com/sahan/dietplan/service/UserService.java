@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.sahan.dietplan.model.User;
 
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -20,6 +21,9 @@ public class UserService {
         // Encrypt the password before saving the user
         user.setPassword(PasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public Optional<User> findById(Integer id) {

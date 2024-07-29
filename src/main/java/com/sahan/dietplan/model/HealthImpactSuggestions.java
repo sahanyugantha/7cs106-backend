@@ -1,6 +1,6 @@
 package com.sahan.dietplan.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_health_impact_suggestions")

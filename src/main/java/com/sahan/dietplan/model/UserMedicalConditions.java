@@ -1,9 +1,9 @@
 package com.sahan.dietplan.model;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import java.io.Serializable;
 
@@ -30,7 +30,7 @@ public class UserMedicalConditions {
             return tblProfileId;
         }
 
-        public void setTblProfileId(Integer tblProfileId) {
+        public void setTblProfileId(int tblProfileId) {
             this.tblProfileId = tblProfileId;
         }
 
@@ -38,7 +38,7 @@ public class UserMedicalConditions {
             return tblMedicalConditionsId;
         }
 
-        public void setTblMedicalConditionsId(Integer tblMedicalConditionsId) {
+        public void setTblMedicalConditionsId(int tblMedicalConditionsId) {
             this.tblMedicalConditionsId = tblMedicalConditionsId;
         }
     }
