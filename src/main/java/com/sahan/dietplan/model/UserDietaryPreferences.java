@@ -1,5 +1,8 @@
 package com.sahan.dietplan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -10,6 +13,18 @@ public class UserDietaryPreferences {
     @EmbeddedId
     private UserDietaryPreferencesId id;
 
+    @ManyToOne
+    @MapsId("tblProfileId")
+    @JoinColumn(name = "tbl_profile_id")
+    @JsonIgnore
+    private Profile profile;
+
+    @ManyToOne
+    @MapsId("tblDietaryPreferencesId")
+    @JoinColumn(name = "tbl_dietary_preferences_id")
+    @JsonUnwrapped
+    private DietaryPreference dietaryPreference;
+
     public UserDietaryPreferencesId getId() {
         return id;
     }
@@ -18,26 +33,20 @@ public class UserDietaryPreferences {
         this.id = id;
     }
 
-    @Embeddable
-    public static class UserDietaryPreferencesId implements Serializable {
-        private Integer tblProfileId;
-        private Integer tblDietaryPreferencesId;
+    public Profile getProfile() {
+        return profile;
+    }
 
-        public Integer getTblProfileId() {
-            return tblProfileId;
-        }
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 
-        public void setTblProfileId(Integer tblProfileId) {
-            this.tblProfileId = tblProfileId;
-        }
+    public DietaryPreference getDietaryPreference() {
+        return dietaryPreference;
+    }
 
-        public Integer getTblDietaryPreferencesId() {
-            return tblDietaryPreferencesId;
-        }
-
-        public void setTblDietaryPreferencesId(Integer tblDietaryPreferencesId) {
-            this.tblDietaryPreferencesId = tblDietaryPreferencesId;
-        }
+    public void setDietaryPreference(DietaryPreference dietaryPreference) {
+        this.dietaryPreference = dietaryPreference;
     }
 }
 

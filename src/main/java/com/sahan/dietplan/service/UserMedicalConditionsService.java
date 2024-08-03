@@ -3,7 +3,7 @@ package com.sahan.dietplan.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sahan.dietplan.model.UserMedicalConditions;
-import com.sahan.dietplan.model.UserMedicalConditions.UserMedicalConditionsId;
+import com.sahan.dietplan.model.UserMedicalConditionsId;
 import com.sahan.dietplan.dao.UserMedicalConditionsRepository;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class UserMedicalConditionsService {
         userMedicalConditionsRepository.deleteById(id);
     }
 
-    public UserMedicalConditions findByProfileIdAndMedicalConditionsId(Integer profileId, Integer conditionId) {
-        return userMedicalConditionsRepository.findByIdTblProfileIdAndIdTblMedicalConditionsId(profileId, conditionId);
-    }
+//    public UserMedicalConditions findByProfileIdAndMedicalConditionsId(Integer profileId, Integer conditionId) {
+//        return userMedicalConditionsRepository.findByIdTblProfileIdAndIdTblMedicalConditionsId(profileId, conditionId);
+//    }
 }

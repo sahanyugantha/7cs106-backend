@@ -1,5 +1,8 @@
 package com.sahan.dietplan.controller;
 
+import com.sahan.dietplan.model.NutritionalInfo;
+import com.sahan.dietplan.service.RecommendationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +20,12 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RecommendationService recommendationService) {
         this.userService = userService;
+        this.recommendationService = recommendationService;
     }
+
+    private final RecommendationService recommendationService;
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
@@ -64,5 +70,32 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @GetMapping("/{id}/recommendations")
+    public ResponseEntity<Object> getDailyRecommendations(@PathVariable Integer id) {
+        try {
+            List<NutritionalInfo> recommendations = recommendationService.generateDailyRecommendation(id);
+
+            if (recommendations.isEmpty()) {
+                Map<String, String> noRec = new HashMap<>();
+                noRec.put("NO", "No Recommendations yet");
+                return ResponseEntity.status(HttpStatus.OK).body(noRec);
+            } else {
+                return ResponseEntity.ok(recommendations);
+            }
+        } catch (Exception e){
+            Map<String, String> noRec = new HashMap<>();
+            noRec.put("ERROR", e.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(noRec);
+        }
+
+    }
+
+//    @GetMapping("/{id}/recommendations")
+//    public ResponseEntity<List<NutritionalInfo>> getDailyRecommendations(@PathVariable Integer id) {
+//        List<NutritionalInfo> recommendations = recommendationService.generateDailyRecommendation(id);
+//        return ResponseEntity.ok(recommendations);
+//    }
 }
 

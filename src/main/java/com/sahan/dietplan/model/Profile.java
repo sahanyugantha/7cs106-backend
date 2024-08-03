@@ -2,27 +2,30 @@ package com.sahan.dietplan.model;
 
 import javax.persistence.*;
 
-import java.math.BigDecimal;
-
 @Entity
-@Table(name = "tbl_profile")
+@Table(name = "tbl_profile", uniqueConstraints = @UniqueConstraint(columnNames = "tbl_user_id"))
 public class Profile {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private BigDecimal height;
-    private BigDecimal weight;
-    private Integer age;
+
+    private float height;
+    private float weight;
+    private int age;
     private String gender;
+    @Column(name = "activity_level")
     private String activityLevel;
-    private BigDecimal waistCircumference;
-    private BigDecimal hipCircumference;
+    @Column(name = "waist_circumference")
+    private Float waistCircumference;
+    @Column(name = "hip_circumference")
+    private Float hipCircumference;
+    @Column(name = "profile_picture")
     private String profilePicture;
+    @Column(name = "tbl_user_id")
+    private int tblUserId;
 
-    @ManyToOne
-    @JoinColumn(name = "tbl_user_id")
-    private User user;
-
+    // Getters and setters
     public Integer getId() {
         return id;
     }
@@ -31,19 +34,27 @@ public class Profile {
         this.id = id;
     }
 
-    public BigDecimal getHeight() {
+    public Integer getTblUserId() {
+        return tblUserId;
+    }
+
+    public void setTblUserId(Integer tblUserId) {
+        this.tblUserId = tblUserId;
+    }
+
+    public Float getHeight() {
         return height;
     }
 
-    public void setHeight(BigDecimal height) {
+    public void setHeight(Float height) {
         this.height = height;
     }
 
-    public BigDecimal getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(BigDecimal weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
@@ -71,19 +82,19 @@ public class Profile {
         this.activityLevel = activityLevel;
     }
 
-    public BigDecimal getWaistCircumference() {
+    public Float getWaistCircumference() {
         return waistCircumference;
     }
 
-    public void setWaistCircumference(BigDecimal waistCircumference) {
+    public void setWaistCircumference(Float waistCircumference) {
         this.waistCircumference = waistCircumference;
     }
 
-    public BigDecimal getHipCircumference() {
+    public Float getHipCircumference() {
         return hipCircumference;
     }
 
-    public void setHipCircumference(BigDecimal hipCircumference) {
+    public void setHipCircumference(Float hipCircumference) {
         this.hipCircumference = hipCircumference;
     }
 
@@ -95,11 +106,19 @@ public class Profile {
         this.profilePicture = profilePicture;
     }
 
-    public User getUser() {
-        return user;
+    public void setHeight(float height) {
+        this.height = height;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setTblUserId(int tblUserId) {
+        this.tblUserId = tblUserId;
     }
 }

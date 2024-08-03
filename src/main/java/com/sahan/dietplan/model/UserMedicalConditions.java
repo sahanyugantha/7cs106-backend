@@ -1,9 +1,9 @@
 package com.sahan.dietplan.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
+import javax.persistence.*;
 
 import java.io.Serializable;
 
@@ -13,6 +13,18 @@ public class UserMedicalConditions {
     @EmbeddedId
     private UserMedicalConditionsId id;
 
+    @ManyToOne
+    @MapsId("tblProfileId")
+    @JoinColumn(name = "tbl_profile_id")
+    @JsonIgnore
+    private Profile profile;
+
+    @ManyToOne
+    @MapsId("tblMedicalConditionsId")
+    @JoinColumn(name = "tbl_medical_conditions_id")
+    @JsonUnwrapped
+    private DietaryPreference dietaryPreference;
+
     public UserMedicalConditionsId getId() {
         return id;
     }
@@ -21,26 +33,19 @@ public class UserMedicalConditions {
         this.id = id;
     }
 
-    @Embeddable
-    public static class UserMedicalConditionsId implements Serializable {
-        private Integer tblProfileId;
-        private Integer tblMedicalConditionsId;
+    public Profile getProfile() {
+        return profile;
+    }
 
-        public Integer getTblProfileId() {
-            return tblProfileId;
-        }
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 
-        public void setTblProfileId(int tblProfileId) {
-            this.tblProfileId = tblProfileId;
-        }
+    public DietaryPreference getDietaryPreference() {
+        return dietaryPreference;
+    }
 
-        public Integer getTblMedicalConditionsId() {
-            return tblMedicalConditionsId;
-        }
-
-        public void setTblMedicalConditionsId(int tblMedicalConditionsId) {
-            this.tblMedicalConditionsId = tblMedicalConditionsId;
-        }
+    public void setDietaryPreference(DietaryPreference dietaryPreference) {
+        this.dietaryPreference = dietaryPreference;
     }
 }
-

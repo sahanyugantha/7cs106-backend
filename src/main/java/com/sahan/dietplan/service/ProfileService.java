@@ -36,8 +36,8 @@ public class ProfileService {
         return false;
     }
 
-    public Optional<Profile> findByTblUserId(Integer userId) {
-        return profileRepository.findByUserId(userId);
+    public Profile findByTblUserId(Integer userId) {
+        return profileRepository.findByTblUserId(userId);
     }
 }
 

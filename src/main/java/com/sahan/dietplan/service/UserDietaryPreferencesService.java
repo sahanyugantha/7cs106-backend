@@ -3,7 +3,7 @@ package com.sahan.dietplan.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sahan.dietplan.model.UserDietaryPreferences;
-import com.sahan.dietplan.model.UserDietaryPreferences.UserDietaryPreferencesId;
+import com.sahan.dietplan.model.UserDietaryPreferencesId;
 import com.sahan.dietplan.dao.UserDietaryPreferencesRepository;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +33,8 @@ public class UserDietaryPreferencesService {
         userDietaryPreferencesRepository.deleteById(id);
     }
 
-    public UserDietaryPreferences findByProfileIdAndDietaryPreferencesId(Integer profileId, Integer dietaryPreferencesId) {
-        return userDietaryPreferencesRepository.findByIdTblProfileIdAndIdTblDietaryPreferencesId(profileId, dietaryPreferencesId);
-    }
+//    public UserDietaryPreferences findByProfileIdAndDietaryPreferencesId(Integer profileId, Integer dietaryPreferencesId) {
+//        return userDietaryPreferencesRepository.findByIdTblProfileIdAndIdTblDietaryPreferencesId(profileId, dietaryPreferencesId);
+//    }
 }
 

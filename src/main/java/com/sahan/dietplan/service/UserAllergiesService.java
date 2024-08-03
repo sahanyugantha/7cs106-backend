@@ -1,9 +1,9 @@
 package com.sahan.dietplan.service;
 
+import com.sahan.dietplan.model.UserAllergiesId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sahan.dietplan.model.UserAllergies;
-import com.sahan.dietplan.model.UserAllergies.UserAllergiesId;
 import com.sahan.dietplan.dao.UserAllergiesRepository;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +33,8 @@ public class UserAllergiesService {
         userAllergiesRepository.deleteById(id);
     }
 
-    public UserAllergies findByProfileIdAndAllergyId(Integer profileId, Integer allergyId) {
-        return userAllergiesRepository.findByIdTblProfileIdAndIdTblAllergiesId(profileId, allergyId);
-    }
+//    public UserAllergies findByProfileIdAndAllergyId(Integer profileId, Integer allergyId) {
+//        return userAllergiesRepository.findByIdTblProfileId(profileId);
+//    }
 }
 
