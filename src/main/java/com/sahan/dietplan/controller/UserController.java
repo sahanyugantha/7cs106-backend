@@ -1,6 +1,7 @@
 package com.sahan.dietplan.controller;
 
 import com.sahan.dietplan.model.NutritionalInfo;
+import com.sahan.dietplan.model.RecommendationResponse;
 import com.sahan.dietplan.service.RecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<User> loginUser(@RequestBody User user) {
         try {
+            //System.out.println("Email --> "+user.getEmail());
+            //System.out.println("PW --> "+user.getPassword());
             User loggedInUser = userService.login(user.getEmail(), user.getPassword());
+
             return ResponseEntity.ok(loggedInUser);
         } catch (Exception e) {
             return ResponseEntity.status(401).body(null); // Unauthorized
@@ -72,30 +76,37 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}/recommendations")
-    public ResponseEntity<Object> getDailyRecommendations(@PathVariable Integer id) {
-        try {
-            List<NutritionalInfo> recommendations = recommendationService.generateDailyRecommendation(id);
-
-            if (recommendations.isEmpty()) {
-                Map<String, String> noRec = new HashMap<>();
-                noRec.put("NO", "No Recommendations yet");
-                return ResponseEntity.status(HttpStatus.OK).body(noRec);
-            } else {
-                return ResponseEntity.ok(recommendations);
-            }
-        } catch (Exception e){
-            Map<String, String> noRec = new HashMap<>();
-            noRec.put("ERROR", e.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(noRec);
-        }
-
-    }
+//    @GetMapping("/{id}/recommendations")
+//    public ResponseEntity<Object> getDailyRecommendations(@PathVariable Integer id) {
+//        try {
+//            List<NutritionalInfo> recommendations = recommendationService.generateDailyRecommendation(id);
+//
+//            if (recommendations.isEmpty()) {
+//                Map<String, String> noRec = new HashMap<>();
+//                noRec.put("NO", "No Recommendations yet");
+//                return ResponseEntity.status(HttpStatus.OK).body(noRec);
+//            } else {
+//                return ResponseEntity.ok(recommendations);
+//            }
+//        } catch (Exception e){
+//            Map<String, String> noRec = new HashMap<>();
+//            noRec.put("ERROR", e.getMessage());
+//            return ResponseEntity.status(HttpStatus.OK).body(noRec);
+//        }
+//
+//    }
 
 //    @GetMapping("/{id}/recommendations")
 //    public ResponseEntity<List<NutritionalInfo>> getDailyRecommendations(@PathVariable Integer id) {
 //        List<NutritionalInfo> recommendations = recommendationService.generateDailyRecommendation(id);
 //        return ResponseEntity.ok(recommendations);
 //    }
+
+    @GetMapping("/{id}/recommendations")
+    public ResponseEntity<RecommendationResponse> getDailyRecommendation(@PathVariable int id) {
+        RecommendationResponse response = recommendationService.generateDailyRecommendation(id);
+        return ResponseEntity.ok(response);
+    }
+
 }
 

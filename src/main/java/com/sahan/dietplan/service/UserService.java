@@ -30,7 +30,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> findByEmail(String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -44,6 +44,7 @@ public class UserService {
 
     public User login(String email, String password) {
         String hashedPassword = PasswordEncoder.encode(password);
+       // System.out.println("hashedPassword --> "+hashedPassword);
         return userRepository.findByEmailAndPassword(email, hashedPassword);
     }
 }

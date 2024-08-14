@@ -5,6 +5,8 @@ import com.sahan.dietplan.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,12 +32,19 @@ public class RecommendationService {
     @Autowired
     private NutritionalInfoRepository nutritionalInfoRepository;
 
-    public List<NutritionalInfo> generateDailyRecommendation(Integer userId) {
+    @Autowired
+    private DailyConsumptionRepository dailyConsumptionRepository;
+
+    @Autowired
+    private DailyWaterIntakeRepository dailyWaterIntakeRepository;
+
+    public RecommendationResponse generateDailyRecommendation(Integer userId) {
         Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent()) {
             throw new RuntimeException("User not found");
         }
 
+        User userEntity = user.get(); // Get the User object
         Profile profile = profileRepository.findByTblUserId(userId);
         if (profile == null) {
             throw new RuntimeException("Profile not found for user id " + userId);
@@ -62,8 +71,76 @@ public class RecommendationService {
                 .filter(food -> !matchesAllergies(food, allergies))
                 .collect(Collectors.toList());
 
-        return finalRecommendations;
-        // return null;
+        // Calculate the total calories consumed and left
+        BigDecimal totalCaloriesConsumed = calculateTotalCaloriesConsumed(userId, LocalDate.now());
+        BigDecimal dailyCaloricIntake = profile.getDailyCalorieGoal(); // Assume this is the user's daily caloric intake
+        BigDecimal caloriesLeft = dailyCaloricIntake.subtract(totalCaloriesConsumed);
+        BigDecimal caloriesToBurn = caloriesLeft.compareTo(BigDecimal.ZERO) < 0 ? caloriesLeft.negate() : BigDecimal.ZERO;
+
+        // Calculate the total water consumed and left
+        BigDecimal totalWaterConsumed = calculateTotalWaterConsumed(userId, LocalDate.now());
+        BigDecimal dailyWaterIntake = profile.getDailyWaterGoal(); // Assume this is the user's daily water intake
+        BigDecimal waterLeft = dailyWaterIntake.subtract(totalWaterConsumed);
+
+        RecommendationResponse response = new RecommendationResponse();
+
+        response.setCaloriesConsumed(totalCaloriesConsumed);
+        response.setCaloriesLeft(caloriesLeft);
+        response.setWaterConsumed(totalWaterConsumed);
+        response.setWaterLeft(waterLeft);
+        response.setCaloriesToBurn(caloriesToBurn);
+        response.setUsername(userEntity.getName());
+        response.setHeight(profile.getHeight());
+        response.setWeight(profile.getWeight());
+        response.setRecommendedFoods(finalRecommendations);
+
+        return response;
+    }
+
+
+//    private BigDecimal calculateTotalCaloriesConsumed(Integer userId, LocalDate date) {
+//        List<DailyConsumption> dailyConsumptions = dailyConsumptionRepository.findByUserIdAndDate(userId, date);
+//        BigDecimal totalCalories = dailyConsumptions.stream()
+//                .map(consumption -> {
+//                    BigDecimal foodCalories = consumption.getNutritionalInfo().getCalories().multiply(consumption.getQuantity());
+//                    return foodCalories.add(consumption.getManualCalories());
+//                })
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//        return totalCalories;
+//    }
+
+    private BigDecimal calculateTotalCaloriesConsumed(Integer userId, LocalDate date) {
+        List<DailyConsumption> dailyConsumptions = dailyConsumptionRepository.findByUserIdAndDate(userId, date);
+
+        if (dailyConsumptions.isEmpty()) {
+            System.out.println("No daily consumptions found for user ID: " + userId + " and date: " + date);
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal totalCalories = dailyConsumptions.stream()
+                .map(consumption -> {
+                    if (consumption.getNutritionalInfo() == null) {
+                        // Log the situation where nutritional info is missing
+                        System.out.println("NutritionalInfo is null for consumption: " + consumption);
+                        return BigDecimal.ZERO.add(consumption.getManualCalories());
+                    } else {
+                        BigDecimal foodCalories = consumption.getNutritionalInfo().getCalories().multiply(consumption.getQuantity());
+                        System.out.println("Food Calories: " + foodCalories + " for consumption: " + consumption);
+                        return foodCalories.add(consumption.getManualCalories());
+                    }
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        System.out.println("Total Calories Consumed: " + totalCalories);
+        return totalCalories;
+    }
+
+
+
+
+    private BigDecimal calculateTotalWaterConsumed(Integer userId, LocalDate date) {
+        DailyWaterIntake dailyWaterIntake = dailyWaterIntakeRepository.findByUserIdAndDate(userId, date);
+        return dailyWaterIntake != null ? dailyWaterIntake.getAmount() : BigDecimal.ZERO;
     }
 
     private boolean matchesPreferences(NutritionalInfo food, List<UserDietaryPreferences> preferences) {

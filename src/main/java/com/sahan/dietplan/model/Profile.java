@@ -1,6 +1,7 @@
 package com.sahan.dietplan.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "tbl_profile", uniqueConstraints = @UniqueConstraint(columnNames = "tbl_user_id"))
@@ -24,6 +25,10 @@ public class Profile {
     private String profilePicture;
     @Column(name = "tbl_user_id")
     private int tblUserId;
+    @Column(name = "daily_calorie_goal")
+    private BigDecimal DailyCalorieGoal;
+    @Column(name = "daily_water_goal")
+    private BigDecimal DailyWaterGoal;
 
     // Getters and setters
     public Integer getId() {
@@ -120,5 +125,21 @@ public class Profile {
 
     public void setTblUserId(int tblUserId) {
         this.tblUserId = tblUserId;
+    }
+
+    public BigDecimal getDailyCalorieGoal() {
+        return DailyCalorieGoal;
+    }
+
+    public void setDailyCalorieGoal(BigDecimal dailyCalorieGoal) {
+        DailyCalorieGoal = dailyCalorieGoal;
+    }
+
+    public BigDecimal getDailyWaterGoal() {
+        return DailyWaterGoal;
+    }
+
+    public void setDailyWaterGoal(BigDecimal dailyWaterGoal) {
+        DailyWaterGoal = dailyWaterGoal;
     }
 }
