@@ -50,6 +50,7 @@ public class RecommendationService {
             throw new RuntimeException("Profile not found for user id " + userId);
         }
 
+
         List<UserDietaryPreferences> dietaryPreferences = userDietaryPreferencesRepository.findByIdTblProfileId(profile.getId());
         List<UserMedicalConditions> medicalConditions = userMedicalConditionsRepository.findByIdTblProfileId(profile.getId());
         List<UserAllergies> allergies = userAllergiesRepository.findByIdTblProfileId(profile.getId());
@@ -61,12 +62,12 @@ public class RecommendationService {
                 .filter(food -> matchesPreferences(food, dietaryPreferences))
                 .collect(Collectors.toList());
 
-        // Further filter foods based on medical conditions
+        // Filter foods based on medical conditions
         List<NutritionalInfo> recommendedFoods = preferredFoods.stream()
                 .filter(food -> matchesMedicalConditions(food, medicalConditions))
                 .collect(Collectors.toList());
 
-        // Finally, exclude foods that match the user's allergies
+        // Exclude foods that match the user's allergies
         List<NutritionalInfo> finalRecommendations = recommendedFoods.stream()
                 .filter(food -> !matchesAllergies(food, allergies))
                 .collect(Collectors.toList());
@@ -82,6 +83,23 @@ public class RecommendationService {
         BigDecimal dailyWaterIntake = profile.getDailyWaterGoal(); // Assume this is the user's daily water intake
         BigDecimal waterLeft = dailyWaterIntake.subtract(totalWaterConsumed);
 
+        List<DailyConsumption> dailyConsumptions = dailyConsumptionRepository.findByUserIdAndDate(userId, LocalDate.now());
+
+        BigDecimal breakfastCalories = BigDecimal.ZERO;
+        BigDecimal lunchCalories = BigDecimal.ZERO;
+        BigDecimal dinnerCalories = BigDecimal.ZERO;
+        BigDecimal otherCalories = BigDecimal.ZERO;
+
+        if (!dailyConsumptions.isEmpty()) {
+            for (DailyConsumption consumption : dailyConsumptions) {
+                breakfastCalories = breakfastCalories.add(consumption.getBreakfastCalories());
+                lunchCalories = lunchCalories.add(consumption.getLunchCalories());
+                dinnerCalories = dinnerCalories.add(consumption.getDinnerCalories());
+                otherCalories = otherCalories.add(consumption.getOtherCalories());
+            }
+        }
+
+
         RecommendationResponse response = new RecommendationResponse();
 
         response.setCaloriesConsumed(totalCaloriesConsumed);
@@ -90,8 +108,17 @@ public class RecommendationService {
         response.setWaterLeft(waterLeft);
         response.setCaloriesToBurn(caloriesToBurn);
         response.setUsername(userEntity.getName());
+
         response.setHeight(profile.getHeight());
         response.setWeight(profile.getWeight());
+        response.setCaloriesGoal(profile.getDailyCalorieGoal());
+        response.setWaterGoal(profile.getDailyWaterGoal());
+
+        response.setBreakfastCalories(breakfastCalories);
+        response.setLunchCalories(lunchCalories);
+        response.setDinnerCalories(dinnerCalories);
+        response.setOtherCalories(otherCalories);
+
         response.setRecommendedFoods(finalRecommendations);
 
         return response;
@@ -110,6 +137,7 @@ public class RecommendationService {
 //    }
 
     private BigDecimal calculateTotalCaloriesConsumed(Integer userId, LocalDate date) {
+        // Fetch the daily consumption record for the given user and date
         List<DailyConsumption> dailyConsumptions = dailyConsumptionRepository.findByUserIdAndDate(userId, date);
 
         if (dailyConsumptions.isEmpty()) {
@@ -117,13 +145,17 @@ public class RecommendationService {
             return BigDecimal.ZERO;
         }
 
+        // Sum up the calories from all records
         BigDecimal totalCalories = dailyConsumptions.stream()
                 .map(consumption -> {
                     if (consumption.getNutritionalInfo() == null) {
-                        // Log the situation where nutritional info is missing
-                        System.out.println("NutritionalInfo is null for consumption: " + consumption);
-                        return BigDecimal.ZERO.add(consumption.getManualCalories());
+                        // If no nutritional info, sum up the meal-specific calorie fields
+                        return consumption.getBreakfastCalories()
+                                .add(consumption.getLunchCalories())
+                                .add(consumption.getDinnerCalories())
+                                .add(consumption.getOtherCalories());
                     } else {
+                        // If nutritional info exists, calculate based on quantity and add manual calories
                         BigDecimal foodCalories = consumption.getNutritionalInfo().getCalories().multiply(consumption.getQuantity());
                         System.out.println("Food Calories: " + foodCalories + " for consumption: " + consumption);
                         return foodCalories.add(consumption.getManualCalories());
@@ -134,7 +166,6 @@ public class RecommendationService {
         System.out.println("Total Calories Consumed: " + totalCalories);
         return totalCalories;
     }
-
 
 
 

@@ -10,9 +10,15 @@ public class RecommendationResponse {
     private BigDecimal waterConsumed;
     private BigDecimal waterLeft;
     private BigDecimal caloriesToBurn;
+    private BigDecimal caloriesGoal;
+    private BigDecimal waterGoal;
     private String username;
     private float height;
     private float weight;
+    private BigDecimal breakfastCalories;
+    private BigDecimal lunchCalories;
+    private BigDecimal dinnerCalories;
+    private BigDecimal otherCalories;
 
     public String getUsername() {
         return username;
@@ -85,5 +91,53 @@ public class RecommendationResponse {
 
     public void setWeight(float weight) {
         this.weight = weight;
+    }
+
+    public BigDecimal getCaloriesGoal() {
+        return caloriesGoal;
+    }
+
+    public void setCaloriesGoal(BigDecimal caloriesGoal) {
+        this.caloriesGoal = caloriesGoal;
+    }
+
+    public BigDecimal getWaterGoal() {
+        return waterGoal;
+    }
+
+    public void setWaterGoal(BigDecimal waterGoal) {
+        this.waterGoal = waterGoal;
+    }
+
+    public BigDecimal getBreakfastCalories() {
+        return breakfastCalories;
+    }
+
+    public void setBreakfastCalories(BigDecimal breakfastCalories) {
+        this.breakfastCalories = breakfastCalories;
+    }
+
+    public BigDecimal getLunchCalories() {
+        return lunchCalories;
+    }
+
+    public void setLunchCalories(BigDecimal lunchCalories) {
+        this.lunchCalories = lunchCalories;
+    }
+
+    public BigDecimal getDinnerCalories() {
+        return dinnerCalories;
+    }
+
+    public void setDinnerCalories(BigDecimal dinnerCalories) {
+        this.dinnerCalories = dinnerCalories;
+    }
+
+    public BigDecimal getOtherCalories() {
+        return otherCalories;
+    }
+
+    public void setOtherCalories(BigDecimal otherCalories) {
+        this.otherCalories = otherCalories;
     }
 }

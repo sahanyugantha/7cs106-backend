@@ -21,6 +21,18 @@ public class DailyConsumption {
     @Column(name = "manual_calories", nullable = false, columnDefinition = "decimal(10,2) default '0.00'")
     private BigDecimal manualCalories;
 
+    @Column(name = "breakfast_calories", nullable = false, columnDefinition = "decimal(10,2) default '0.00'")
+    private BigDecimal breakfastCalories;
+
+    @Column(name = "lunch_calories", nullable = false, columnDefinition = "decimal(10,2) default '0.00'")
+    private BigDecimal lunchCalories;
+
+    @Column(name = "dinner_calories", nullable = false, columnDefinition = "decimal(10,2) default '0.00'")
+    private BigDecimal dinnerCalories;
+
+    @Column(name = "other_calories", nullable = false, columnDefinition = "decimal(10,2) default '0.00'")
+    private BigDecimal otherCalories;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -75,5 +87,37 @@ public class DailyConsumption {
 
     public void setNutritionalInfo(NutritionalInfo nutritionalInfo) {
         this.nutritionalInfo = nutritionalInfo;
+    }
+
+    public BigDecimal getBreakfastCalories() {
+        return breakfastCalories;
+    }
+
+    public void setBreakfastCalories(BigDecimal breakfastCalories) {
+        this.breakfastCalories = breakfastCalories;
+    }
+
+    public BigDecimal getLunchCalories() {
+        return lunchCalories;
+    }
+
+    public void setLunchCalories(BigDecimal lunchCalories) {
+        this.lunchCalories = lunchCalories;
+    }
+
+    public BigDecimal getDinnerCalories() {
+        return dinnerCalories;
+    }
+
+    public void setDinnerCalories(BigDecimal dinnerCalories) {
+        this.dinnerCalories = dinnerCalories;
+    }
+
+    public BigDecimal getOtherCalories() {
+        return otherCalories;
+    }
+
+    public void setOtherCalories(BigDecimal otherCalories) {
+        this.otherCalories = otherCalories;
     }
 }
