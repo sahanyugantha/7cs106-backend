@@ -38,7 +38,7 @@ public class DailyConsumption {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "food_id", nullable = false)
+    @JoinColumn(name = "food_id", nullable = true)
     private NutritionalInfo nutritionalInfo;
 
     public Integer getId() {

@@ -145,7 +145,6 @@ public class RecommendationService {
             return BigDecimal.ZERO;
         }
 
-        // Sum up the calories from all records
         BigDecimal totalCalories = dailyConsumptions.stream()
                 .map(consumption -> {
                     if (consumption.getNutritionalInfo() == null) {
