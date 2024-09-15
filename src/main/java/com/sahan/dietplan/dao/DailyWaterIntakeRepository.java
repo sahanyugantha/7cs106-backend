@@ -11,4 +11,5 @@ import java.util.List;
 public interface DailyWaterIntakeRepository extends JpaRepository<DailyWaterIntake, Integer> {
     DailyWaterIntake findByUserIdAndDate(Integer userId, LocalDate date);
     List<DailyWaterIntake> findByUserId(Integer userId);
+   // List<DailyWaterIntake> findByUserIdAndDate(Integer userId, LocalDate date);
 }

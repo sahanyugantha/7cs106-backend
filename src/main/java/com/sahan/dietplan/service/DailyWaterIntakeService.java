@@ -31,4 +31,9 @@ public class DailyWaterIntakeService {
     public List<DailyWaterIntake> getDailyWaterIntakeByUser(Integer userId) {
         return dailyWaterIntakeRepository.findByUserId(userId);
     }
+
+    public DailyWaterIntake findByUserIdAndDate(Integer userId, LocalDate date) {
+        return dailyWaterIntakeRepository.findByUserIdAndDate(userId, date);
+    }
+
 }
